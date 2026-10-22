@@ -60,7 +60,7 @@ public class EstudianteUI {
         if (lista.isEmpty()) {
             System.out.println("No hay estudiantes registrados.");
         } else {
-            lista.forEach(System.out.println);
+          lista.forEach(System.out::println);
         }
     }
 
