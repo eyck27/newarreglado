@@ -1,4 +1,4 @@
-package com.academico.application;
+package com.academico.application.service;
 
 import com.academico.domain.model.Curso;
 import com.academico.domain.repository.CursoRepository;

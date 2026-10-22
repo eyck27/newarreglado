@@ -5,9 +5,8 @@ public class Estudiante {
     private String nombre;
     private String correo;
 
-    public Estudiante() {
+    public Estudiante() {}
 
-    }
     public Estudiante(int id, String nombre, String correo) {
         this.id = id;
         this.nombre = nombre;
@@ -40,10 +39,6 @@ public class Estudiante {
 
     @Override
     public String toString() {
-        return "Estudiante{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", correo='" + correo + '\'' +
-                '}';
+        return "ID: " + id + " | Nombre: " + nombre + " | Correo: " + correo;
     }
 }

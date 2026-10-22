@@ -1,4 +1,4 @@
-package com.academico.infrastructure.persistence;
+package com.academico.infrastructure.adapter.out.persistence;
 
 import com.academico.domain.model.Curso;
 import com.academico.domain.repository.CursoRepository;

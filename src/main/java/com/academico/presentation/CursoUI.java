@@ -1,6 +1,6 @@
 package com.academico.presentation;
 
-import com.academico.application.CursoService;
+import com.academico.application.service.CursoService;
 import com.academico.domain.model.Curso;
 
 import java.util.List;

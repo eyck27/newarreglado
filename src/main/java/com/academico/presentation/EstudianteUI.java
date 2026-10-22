@@ -1,113 +1,86 @@
 package com.academico.presentation;
+
+import com.academico.application.port.in.EstudianteUseCase;
 import com.academico.domain.model.Estudiante;
-import com.academico.application.EstudianteService;
 
-import  java.util.Scanner;
-
+import java.util.List;
+import java.util.Scanner;
 
 public class EstudianteUI {
 
-    //private static final EstudianteService service = new EstudianteService();
-    //agregar
+    private final EstudianteUseCase estudianteUseCase;
+    private final Scanner scanner;
 
-    private final EstudianteService service;
-
-    public EstudianteUI(EstudianteService service){
-        this.service=service;
+    public EstudianteUI(EstudianteUseCase estudianteUseCase) {
+        this.estudianteUseCase = estudianteUseCase;
+        this.scanner = new Scanner(System.in);
     }
-    // La UI tampoco crea sus dependencias.
 
+    public void iniciar() {
+        int opcion = -1;
+        while (opcion != 5) {
+            System.out.println("\n=== GESTIÓN DE ESTUDIANTES ===");
+            System.out.println("1. Registrar estudiante");
+            System.out.println("2. Listar estudiantes");
+            System.out.println("3. Actualizar estudiante");
+            System.out.println("4. Eliminar estudiante");
+            System.out.println("5. Salir");
+            System.out.print("Seleccione una opción: ");
 
-    // public static void mostrarMenu(Scanner sc) {
-    public void mostrarMenu(Scanner sc) {
-        int opcion;
-        do {
-
-            System.out.println("\n--- ESTUDIANTES ---");
-            System.out.println("1. Registrar");
-            System.out.println("2. Listar");
-            System.out.println("3. Actualizar");
-            System.out.println("4. Eliminar");
-            System.out.println("0. Regresar");
-            System.out.print("Opción: ");
-
-            opcion = sc.nextInt();
-            sc.nextLine();
-
-            switch (opcion) {
-                case 1->registrar(sc);
-                case 2->listar();
-                case 3->actualizar(sc);
-                case 4->eliminar (sc);
-                case 0 ->
-                        System.out.println("Regresando...");
-                default ->
-                        System.out.println("Opción no válida.");
+            try {
+                opcion = Integer.parseInt(scanner.nextLine());
+                switch (opcion) {
+                    case 1 -> registrar();
+                    case 2 -> listar();
+                    case 3 -> actualizar();
+                    case 4 -> eliminar();
+                    case 5 -> System.out.println("Saliendo...");
+                    default -> System.out.println("Opción no válida.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
-        } while (opcion != 0);
+        }
     }
 
-
-    // agregar  metodos privados
-    private void registrar(Scanner sc){
+    private void registrar() {
         System.out.print("ID: ");
-        int id = sc.nextInt();
-        sc.nextLine();
-
+        int id = Integer.parseInt(scanner.nextLine());
         System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
-
+        String nombre = scanner.nextLine();
         System.out.print("Correo: ");
-        String correo = sc.nextLine();
+        String correo = scanner.nextLine();
 
-        Estudiante estudiante =
-                new Estudiante(id, nombre, correo);
-        service.registrar(estudiante);
-
-        System.out.println("Estudiante registrado.");
-
+        estudianteUseCase.registrar(new Estudiante(id, nombre, correo));
+        System.out.println("Estudiante registrado con éxito.");
     }
-    private void listar(){
-        service.listar().forEach(e ->
-                System.out.println(
-                        e.getId() + " - " +
-                                e.getNombre() + " - " +
-                                e.getCorreo()
-                )
-        );
+
+    private void listar() {
+        List<Estudiante> lista = estudianteUseCase.listar();
+        if (lista.isEmpty()) {
+            System.out.println("No hay estudiantes registrados.");
+        } else {
+            lista.forEach(System.out.println);
+        }
     }
-    private void actualizar(Scanner sc){
-        System.out.print("ID del estudiante: ");
-        int idAct = sc.nextInt();
-        sc.nextLine();
 
-        System.out.print("Nuevo nombre: ");
-        String nombreAct = sc.nextLine();
+    private void actualizar() {
+        System.out.print("ID a actualizar: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        System.out.print("Nuevo Nombre: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Nuevo Correo: ");
+        String correo = scanner.nextLine();
 
-        System.out.print("Nuevo correo: ");
-        String correoAct = sc.nextLine();
-
-        boolean actualizado = service.actualizar(
-                new Estudiante(idAct, nombreAct, correoAct)
-        );
-
-        System.out.println(
-                actualizado
-                        ? "Estudiante actualizado."
-                        : "Estudiante no encontrado."
-        );
+        estudianteUseCase.actualizar(new Estudiante(id, nombre, correo));
+        System.out.println("Estudiante actualizado.");
     }
-    private void eliminar(Scanner sc){
+
+    private void eliminar() {
         System.out.print("ID a eliminar: ");
-        int idEliminar = sc.nextInt();
+        int id = Integer.parseInt(scanner.nextLine());
 
-        boolean eliminado =
-                service.eliminar(idEliminar);
-
-        System.out.println(
-                eliminado
-                        ? "Estudiante eliminado."
-                        : "Estudiante no encontrado."
-        );
+        estudianteUseCase.eliminar(id);
+        System.out.println("Estudiante eliminado.");
     }
 }
